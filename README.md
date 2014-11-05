@@ -4,6 +4,8 @@ Boot task to compile Garden stylesheets.
 
 Provides the `garden` task, which compiles Garden to CSS.
 
+[![Clojars Project](http://clojars.org/boot-garden/latest-version.svg)](http://clojars.org/boot-garden)
+
 ## Usage
 
 Lets assume you have a `styles.clj` as follows:
