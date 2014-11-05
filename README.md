@@ -35,7 +35,7 @@ To regenerate stylesheets on changes you can use boot's generic `watch` task:
 boot watch garden -s my-project.styles/base
 ```
 
-### `build.boot`
+### `build.boot` file in your project
 
 In your `build.boot` you could call it like this:
 
