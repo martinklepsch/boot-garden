@@ -1,10 +1,14 @@
 (ns boot-garden.core
   {:boot/export-tasks true}
   (:require [clojure.java.io   :as io]
+            [ns-tracker.core   :as nst]
+            [boot.core         :as boot :refer [deftask]]
             [boot.pod          :as pod]
-            [boot.core         :as core]
             [boot.file         :as file]
             [boot.util         :as util]))
+
+(def initial
+  (atom true))
 
 (deftask garden
   "compile garden"
@@ -16,14 +20,18 @@
 
   (let [output-path (or output-to "main.css")
         css-var     styles-var
-        tgt-dir     (core/mktgtdir!)
-        out         (io/file tgt-dir output-path)]
-    (with-pre-wrap
-      (let [w (pod/make-pod (core/get-env))]
-        (util/info "Compiling %s ...\n" (.getName out))
-        (pod/require-in-pod w "garden.core")
-        (pod/require-in-pod w (namespace css-var))
-        (pod/eval-in w (garden.core/css {:output-to ~(.getPath out)
-                                         :pretty-print ~pretty-print
-                                         :vendors ~vendors
-                                         :auto-prefix ~(set auto-prefix)} ~css-var))))))
+        ns-sym      (symbol (namespace css-var))
+        tgt-dir     (boot/mktgtdir!)
+        out         (io/file tgt-dir output-path)
+        changed-ns  (nst/ns-tracker (seq (boot/get-env :src-paths)))]
+    (boot/with-pre-wrap
+      (when (or @initial (some #{ns-sym} (changed-ns)))
+        (let [w   (pod/make-pod (boot/get-env))]
+          (if @initial (reset! initial false))
+          (util/info "Compiling %s ...\n" (.getName out))
+          (pod/require-in-pod w "garden.core")
+          (pod/require-in-pod w (str ns-sym))
+          (pod/eval-in w (garden.core/css {:output-to ~(.getPath out)
+                                           :pretty-print ~pretty-print
+                                           :vendors ~vendors
+                                           :auto-prefix ~(set auto-prefix)} ~css-var)))))))
