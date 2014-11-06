@@ -1,6 +1,6 @@
 # `boot-garden`
 
-Boot task to compile Garden stylesheets.
+Boot task to compile [Garden](https://github.com/noprompt/garden) stylesheets.
 
 Provides the `garden` task, which compiles Garden to CSS.
 
