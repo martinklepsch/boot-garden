@@ -12,7 +12,7 @@ Lets assume you have a `styles.clj` as follows:
 
 ```clojure
 (ns my-project.styles
-  (:require [garden.def :refer [defrule defkeyframes defstylesheet defstyles]]
+  (:require [garden.def :refer [defrule defstyles]]
             [garden.stylesheet :refer [rule]]))
 
 (defstyles base
