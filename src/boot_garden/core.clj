@@ -29,6 +29,7 @@
         (let [w   (pod/make-pod (boot/get-env))]
           (if @initial (reset! initial false))
           (util/info "Compiling %s ...\n" (.getName out))
+          (io/make-parents out)
           (pod/require-in-pod w "garden.core")
           (pod/require-in-pod w (str ns-sym))
           (pod/eval-in w (garden.core/css {:output-to ~(.getPath out)
