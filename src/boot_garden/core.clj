@@ -28,7 +28,7 @@
       (when (or @initial (some #{ns-sym} (changed-ns)))
         (let [w   (pod/make-pod (boot/get-env))]
           (if @initial (reset! initial false))
-          (util/info "Compiling %s ...\n" (.getName out))
+          (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
           (pod/require-in-pod w "garden.core")
           (pod/require-in-pod w (str ns-sym))
