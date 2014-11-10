@@ -25,11 +25,10 @@
         ns-sym      (symbol (namespace css-var))
         tgt-dir     (boot/mktgtdir!)
         out         (io/file tgt-dir output-path)
-        ; FIXME use this in pod/eval-in below instead
-        ; src-paths   (seq (boot/get-env :src-paths))
+        src-paths   (vec (boot/get-env :src-paths))
         ns-pod      (ns-tracker-pod)
         _           (pod/require-in-pod ns-pod 'ns-tracker.core)
-        _           (pod/eval-in ns-pod (def cns (ns-tracker.core/ns-tracker (seq ~(boot/get-env :src-paths)))))]
+        _           (pod/eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
     (boot/with-pre-wrap
       (when (or @initial (some #{ns-sym} (pod/eval-in ns-pod (cns))))
         (let [c-pod   (pod/make-pod (boot/get-env))]
