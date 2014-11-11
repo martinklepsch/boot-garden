@@ -1,4 +1,4 @@
-# `boot-garden`
+# boot-garden
 
 Boot task to compile [Garden](https://github.com/noprompt/garden) stylesheets.
 
