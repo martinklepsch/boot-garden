@@ -23,7 +23,7 @@
   (let [output-path (or output-to "main.css")
         css-var     styles-var
         ns-sym      (symbol (namespace css-var))
-        tgt-dir     (boot/mktgtdir!)
+        tgt-dir     (boot/mkrscdir!)
         out         (io/file tgt-dir output-path)
         src-paths   (vec (boot/get-env :src-paths))
         ns-pod      (ns-tracker-pod)
