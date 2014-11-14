@@ -23,11 +23,11 @@
   (let [output-path (or output-to "main.css")
         css-var     styles-var
         ns-sym      (symbol (namespace css-var))
-        tgt-dir     (boot/mktgtdir!)
+        tgt-dir     (boot/resource-dir!)
         out         (io/file tgt-dir output-path)
         src-paths   (vec (boot/get-env :src-paths))
         ns-pod      (ns-tracker-pod)
-        _           (pod/require-in-pod ns-pod 'ns-tracker.core)
+        _           (pod/require-in ns-pod 'ns-tracker.core)
         _           (pod/eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
     (boot/with-pre-wrap
       (when (or @initial (some #{ns-sym} (pod/eval-in ns-pod (cns))))
@@ -35,8 +35,8 @@
           (if @initial (reset! initial false))
           (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
-          (pod/require-in-pod c-pod 'garden.core)
-          (pod/require-in-pod c-pod (str ns-sym))
+          (pod/require-in c-pod 'garden.core)
+          (pod/require-in c-pod (str ns-sym))
           (pod/eval-in c-pod (garden.core/css {:output-to ~(.getPath out)
                                                :pretty-print ~pretty-print
                                                :vendors ~vendors
