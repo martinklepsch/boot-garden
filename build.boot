@@ -1,14 +1,28 @@
 (set-env!
+  :source-paths #{"src"}
   :dependencies '[[org.clojure/clojure       "1.6.0"       :scope "provided"]
-                  [boot/core                 "2.0.0-pre22" :scope "provided"]
-                  [ns-tracker                "0.2.2"]
-                  [tailrecursion/boot-useful "0.1.3"       :scope "test"]])
+                  [boot/core                 "2.0.0-pre28" :scope "provided"]
+                  [ns-tracker                "0.2.2"]])
 
-(require '[tailrecursion.boot-useful :refer :all])
+; (require '[tailrecursion.boot-useful :refer :all])
 
 (def +version+ "0.0.1")
 
-(useful! +version+)
+; (useful! +version+)
+
+(deftask add-src []
+  (with-pre-wrap fileset
+    (-> (reduce
+          add-resource
+          fileset
+          (input-dirs fileset))
+        commit!)))
+
+(deftask build-jar
+  "Build jar and install to local repo."
+  []
+  (comp (pom) (add-src) (jar) (install)))
+
 
 (task-options!
   pom  [:project     'boot-garden
