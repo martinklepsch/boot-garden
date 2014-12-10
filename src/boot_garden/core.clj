@@ -12,6 +12,9 @@
 (defn ns-tracker-pod []
   (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.2.2"]])))
 
+(defn garden-pod []
+  (pod/make-pod (update-in (boot/get-env) [:dependencies] conj '[garden "1.2.5"])))
+
 (deftask garden
   "compile garden"
   [o output-to PATH      str   "The output css file path relative to docroot."
@@ -36,7 +39,7 @@
           (if @initial (reset! initial false))
           (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
-          (.require c-pod 'garden.core)
+          (.require c-pod "garden.core")
           (.require c-pod (str ns-sym))
           (pod/with-call-in c-pod (garden.core/css {:output-to ~(.getPath out)
                                                     :pretty-print ~pretty-print
