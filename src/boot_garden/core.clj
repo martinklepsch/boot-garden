@@ -20,24 +20,25 @@
    v vendors NAME        [str] "Vendors to apply prefixed for"
    a auto-prefix NAME    [str] "Properties to auto-prefix with vendor-prefixes"]
 
+  (util/info "TESTING")
   (let [output-path (or output-to "main.css")
         css-var     styles-var
         ns-sym      (symbol (namespace css-var))
-        tgt-dir     (boot/resource-dir!)
+        tgt-dir     (boot/temp-dir!)
         out         (io/file tgt-dir output-path)
         src-paths   (vec (boot/get-env :src-paths))
         ns-pod      (ns-tracker-pod)
-        _           (pod/require-in ns-pod 'ns-tracker.core)
-        _           (pod/eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
-    (boot/with-pre-wrap
-      (when (or @initial (some #{ns-sym} (pod/eval-in ns-pod (cns))))
-        (let [c-pod   (pod/make-pod (boot/get-env))]
+        _           (.require ns-pod "ns-tracker.core")
+        _           (pod/with-eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
+    (boot/with-pre-wrap fileset
+      (when (or @initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
+        (let [c-pod   (garden-pod)]
           (if @initial (reset! initial false))
           (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
-          (pod/require-in c-pod 'garden.core)
-          (pod/require-in c-pod (str ns-sym))
-          (pod/eval-in c-pod (garden.core/css {:output-to ~(.getPath out)
-                                               :pretty-print ~pretty-print
-                                               :vendors ~vendors
-                                               :auto-prefix ~(set auto-prefix)} ~css-var)))))))
+          (.require c-pod 'garden.core)
+          (.require c-pod (str ns-sym))
+          (pod/with-call-in c-pod (garden.core/css {:output-to ~(.getPath out)
+                                                    :pretty-print ~pretty-print
+                                                    :vendors ~vendors
+                                                    :auto-prefix ~(set auto-prefix)} ~css-var)))))))
