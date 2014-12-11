@@ -31,7 +31,7 @@
         out         (io/file tgt-dir output-path)
         src-paths   (vec (boot/get-env :source-paths))
         ns-pod      (ns-tracker-pod)
-        _           (.require ns-pod "ns-tracker.core")
+        _           (pod/require-in ns-pod 'ns-tracker.core)
         _           (pod/with-eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
     (boot/with-pre-wrap fileset
       (util/info "TESTING 2222")
@@ -40,8 +40,8 @@
           (if @initial (reset! initial false))
           (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
-          (.require c-pod "garden.core")
-          (.require c-pod (str ns-sym))
+          (pod/require-in c-pod 'garden.core)
+          (pod/require-in c-pod (str ns-sym))
           (pod/with-call-in c-pod (garden.core/css {:output-to ~(.getPath out)
                                                     :pretty-print ~pretty-print
                                                     :vendors ~vendors
