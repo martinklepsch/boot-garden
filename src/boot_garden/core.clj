@@ -29,11 +29,12 @@
         ns-sym      (symbol (namespace css-var))
         tgt-dir     (boot/temp-dir!)
         out         (io/file tgt-dir output-path)
-        src-paths   (vec (boot/get-env :src-paths))
+        src-paths   (vec (boot/get-env :source-paths))
         ns-pod      (ns-tracker-pod)
         _           (.require ns-pod "ns-tracker.core")
         _           (pod/with-eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
     (boot/with-pre-wrap fileset
+      (util/info "TESTING 2222")
       (when (or @initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
         (let [c-pod   (garden-pod)]
           (if @initial (reset! initial false))
