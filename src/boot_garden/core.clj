@@ -16,7 +16,7 @@
   (pod/make-pod (add-dep (boot/get-env) '[ns-tracker "0.2.2"])))
 
 (defn garden-pool []
-  (pod/pod-pool (add-dep (boot/get-env)) '[garden "1.2.5"]))
+  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])))
 
 (deftask garden
   "compile garden"
