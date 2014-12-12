@@ -10,10 +10,10 @@
   (atom true))
 
 (defn ns-tracker-pod []
-  (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.2.2"]])))
+  (pod/make-pod (update-in (boot/get-env) [:dependencies] conj '[ns-tracker "0.2.2"])))
 
 (defn garden-pool []
-  (pod/pod-pool 2 (update-in (boot/get-env) [:dependencies] conj '[garden "1.2.5"])))
+  (pod/pod-pool (update-in (boot/get-env) [:dependencies] conj '[garden "1.2.5"])))
 
 (deftask garden
   "compile garden"
@@ -35,8 +35,7 @@
         _           (pod/with-eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
     (boot/with-pre-wrap fileset
       (when (or @initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
-        (garden-pods :refresh)
-        (let [c-pod   (garden-pods)]
+        (let [c-pod   (garden-pods :refresh)]
           (if @initial (reset! initial false))
           (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
