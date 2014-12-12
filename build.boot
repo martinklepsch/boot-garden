@@ -20,12 +20,6 @@
           (input-dirs fileset))
         commit!)))
 
-(deftask build-jar
-  "Build jar and install to local repo."
-  []
-  (comp (pom) (add-src) (jar) (install)))
-
-
 (task-options!
  pom  {:project     'boot-garden
        :version     +version+

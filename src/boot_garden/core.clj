@@ -9,11 +9,14 @@
 (def initial
   (atom true))
 
+(defn add-dep [env dep]
+  (update-in env [:dependencies] (fnil conj []) dep))
+
 (defn ns-tracker-pod []
-  (pod/make-pod (update-in (boot/get-env) [:dependencies] conj '[ns-tracker "0.2.2"])))
+  (pod/make-pod (add-dep (boot/get-env) '[ns-tracker "0.2.2"])))
 
 (defn garden-pool []
-  (pod/pod-pool (update-in (boot/get-env) [:dependencies] conj '[garden "1.2.5"])))
+  (pod/pod-pool (add-dep (boot/get-env)) '[garden "1.2.5"]))
 
 (deftask garden
   "compile garden"
