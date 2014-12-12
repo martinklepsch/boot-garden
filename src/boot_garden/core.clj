@@ -33,19 +33,20 @@
         out         (io/file tmp output-path)
         src-paths   (vec (boot/get-env :source-paths))
         garden-pods (garden-pool)
-        ns-pod      (ns-tracker-pod)
-        _           (pod/require-in ns-pod 'ns-tracker.core)
-        _           (pod/with-eval-in ns-pod (def cns (ns-tracker.core/ns-tracker ~src-paths)))]
+        ns-pod      (ns-tracker-pod)]
+    (pod/with-eval-in ns-pod
+      (require 'ns-tracker.core)
+      (def cns (ns-tracker.core/ns-tracker ~src-paths)))
     (boot/with-pre-wrap fileset
       (when (or @initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
         (let [c-pod   (garden-pods :refresh)]
           (if @initial (reset! initial false))
           (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
-          (pod/require-in c-pod 'garden.core)
-          (pod/require-in c-pod (str ns-sym))
-          (pod/with-call-in c-pod (garden.core/css {:output-to ~(.getPath out)
-                                                    :pretty-print ~pretty-print
-                                                    :vendors ~vendors
-                                                    :auto-prefix ~(set auto-prefix)} ~css-var))))
+          (pod/with-eval-in c-pod
+            (require 'garden.core '~ns-sym)
+            (garden.core/css {:output-to ~(.getPath out)
+                              :pretty-print ~pretty-print
+                              :vendors ~vendors
+                              :auto-prefix ~(set auto-prefix)} ~css-var))))
       (-> fileset (boot/add-resource tmp) boot/commit!))))
