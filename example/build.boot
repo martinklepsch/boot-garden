@@ -6,5 +6,5 @@
 
 (require '[boot-garden.core :refer [garden]])
 
-(task-options! garden [:styles-var 'stylesheet/screen
-                       :output-to "public/css/garden.css"])
+(task-options! garden {:styles-var 'stylesheet/screen
+                       :output-to "public/css/garden.css"})
