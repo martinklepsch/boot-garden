@@ -16,7 +16,8 @@
   (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.2.2"]])))
 
 (defn garden-pool []
-  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])))
+  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])
+                :init (fn [pod] (pod/require-in pod 'garden.core))))
 
 (deftask garden
   "compile garden"
@@ -44,7 +45,7 @@
           (util/info "Compiling %s...\n" (.getName out))
           (io/make-parents out)
           (pod/with-eval-in c-pod
-            (require 'garden.core '~ns-sym)
+            (require '~ns-sym)
             (garden.core/css {:output-to ~(.getPath out)
                               :pretty-print ~pretty-print
                               :vendors ~vendors
