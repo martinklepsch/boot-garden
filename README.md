@@ -61,3 +61,9 @@ on how to use these. By default `boot-garden` will save the compiled CSS file at
  v vendors NAME        [str] "Vendors to apply prefixed for"
  a auto-prefix NAME    [str] "Properties to auto-prefix with vendor-prefixes"]
 ```
+
+## License
+
+Copyright Martin Klepsch 2014.
+
+Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
