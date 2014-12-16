@@ -1,14 +1,12 @@
 (set-env!
   :source-paths #{"src"}
   :dependencies '[[org.clojure/clojure       "1.6.0"       :scope "provided"]
-                  ;; uncomment or remove when -rc1 is out
-                  ;; [boot/core                 "2.0.0-rc1" :scope "provided"]
                   [ns-tracker                "0.2.2"]
                   [adzerk/bootlaces          "0.1.5"       :scope "test"]])
 
 (require '[adzerk.bootlaces :refer :all])
 
-(def +version+ "1.2.5")
+(def +version+ "1.2.5-1")
 
 (bootlaces! +version+)
 
