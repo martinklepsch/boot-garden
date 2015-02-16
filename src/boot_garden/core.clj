@@ -25,7 +25,7 @@
    s styles-var SYM      sym   "The var containing garden rules"
    p pretty-print        bool  "Pretty print compiled CSS"
    v vendors             [str] "Vendors to apply prefixed for"
-   a auto-prefix         [str] "Properties to auto-prefix with vendor-prefixes"]
+   a auto-prefix         #{kw} "Properties to auto-prefix with vendor-prefixes"]
 
   (let [output-path (or output-to "main.css")
         css-var     styles-var
@@ -49,5 +49,5 @@
             (garden.core/css {:output-to ~(.getPath out)
                               :pretty-print ~pretty-print
                               :vendors ~vendors
-                              :auto-prefix ~(set auto-prefix)} ~css-var))))
+                              :auto-prefix ~auto-prefix} ~css-var))))
       (-> fileset (boot/add-resource tmp) boot/commit!))))
