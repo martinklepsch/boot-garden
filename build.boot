@@ -6,7 +6,7 @@
 
 (require '[adzerk.bootlaces :refer :all])
 
-(def +version+ "1.2.5-1")
+(def +version+ "1.2.5-2")
 
 (bootlaces! +version+)
 
@@ -24,5 +24,4 @@
        :description "Boot task to compile Garden stylesheets to CSS."
        :url         "https://github.com/martinklepsch/boot-garden"
        :scm         {:url "https://github.com/martinklepsch/boot-garden"}
-       :license     {:name "Eclipse Public License"
-                     :url  "http://www.eclipse.org/legal/epl-v10.html"}})
+       :license     {"EPL" "http://www.eclipse.org/legal/epl-v10.html"}})
