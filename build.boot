@@ -1,12 +1,12 @@
 (set-env!
   :source-paths #{"src"}
-  :dependencies '[[org.clojure/clojure       "1.6.0"       :scope "provided"]
-                  [ns-tracker                "0.2.2"]
-                  [adzerk/bootlaces          "0.1.5"       :scope "test"]])
+  :dependencies '[[org.clojure/clojure       "1.6.0"  :scope "provided"]
+                  [adzerk/bootlaces          "0.1.11" :scope "test"]
+                  [ns-tracker                "0.2.2"]])
 
-(require '[adzerk.bootlaces :refer :all])
+(require '[adzerk.bootlaces :refer [bootlaces! build-jar push-release]])
 
-(def +version+ "1.2.5-2")
+(def +version+ "1.2.5-3")
 
 (bootlaces! +version+)
 
@@ -19,7 +19,7 @@
         commit!)))
 
 (task-options!
- pom  {:project     'boot-garden
+ pom  {:project     'org.martinklepsch/boot-garden
        :version     +version+
        :description "Boot task to compile Garden stylesheets to CSS."
        :url         "https://github.com/martinklepsch/boot-garden"

@@ -4,7 +4,11 @@ Boot task to compile [Garden](https://github.com/noprompt/garden) stylesheets.
 
 Provides the `garden` task, which compiles Garden to CSS.
 
-[![Clojars Project](http://clojars.org/boot-garden/latest-version.svg)](http://clojars.org/boot-garden)
+[](dependency)
+```clojure
+[org.martinklepsch/boot-garden "1.2.5-3"] ;; latest release
+```
+[](/dependency)
 
 ## Usage
 

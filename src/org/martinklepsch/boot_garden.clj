@@ -1,4 +1,4 @@
-(ns boot-garden.core
+(ns org.martinklepsch.boot-garden
   {:boot/export-tasks true}
   (:require [clojure.java.io   :as io]
             [boot.core         :as boot :refer [deftask]]
@@ -30,7 +30,7 @@
   (let [output-path (or output-to "main.css")
         css-var     styles-var
         ns-sym      (symbol (namespace css-var))
-        tmp         (boot/temp-dir!)
+        tmp         (boot/tmp-dir!)
         out         (io/file tmp output-path)
         src-paths   (vec (boot/get-env :source-paths))
         garden-pods (garden-pool)
