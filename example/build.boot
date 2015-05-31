@@ -6,5 +6,5 @@
 
 (require '[org.martinklepsch.boot-garden :refer [garden]])
 
-(task-options! garden {:styles-var 'stylesheet/screen
+(task-options! garden {:styles-var 'stylesheet/combined
                        :output-to "public/css/garden.css"})
