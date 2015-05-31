@@ -1,8 +1,6 @@
 (set-env!
  :source-paths #{"src"}
- :dependencies '[[org.martinklepsch/boot-garden "1.2.5-3"]
-                 [org.clojure/clojure "1.6.0" :scope "provided"]
-                 [boot/core           "2.0.0" :scope "provided"]])
+ :dependencies '[[org.martinklepsch/boot-garden "1.2.5-4"]])
 
 (require '[org.martinklepsch.boot-garden :refer [garden]])
 
