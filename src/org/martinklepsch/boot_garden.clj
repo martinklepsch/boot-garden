@@ -13,7 +13,7 @@
   (update-in env [:dependencies] (fnil conj []) dep))
 
 (defn ns-tracker-pod []
-  (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.2.2"]])))
+  (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.3.0"]])))
 
 (defn garden-pool []
   (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])

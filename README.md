@@ -6,7 +6,7 @@ Provides the `garden` task, which compiles Garden to CSS.
 
 [](dependency)
 ```clojure
-[org.martinklepsch/boot-garden "1.2.5-3"] ;; latest release
+[org.martinklepsch/boot-garden "1.2.5-4"] ;; latest release
 ```
 [](/dependency)
 
