@@ -1,6 +1,6 @@
 (set-env!
  :source-paths #{"src"}
- :dependencies '[[org.martinklepsch/boot-garden "1.2.5-4"]])
+ :dependencies '[[org.martinklepsch/boot-garden "1.2.5-5"]])
 
 (require '[org.martinklepsch.boot-garden :refer [garden]])
 
