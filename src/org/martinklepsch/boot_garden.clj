@@ -47,7 +47,7 @@
           (pod/with-eval-in c-pod
             (require '~ns-sym)
             (garden.core/css {:output-to ~(.getPath out)
-                              :pretty-print ~pretty-print
+                              :pretty-print? ~pretty-print
                               :vendors ~vendors
                               :auto-prefix ~auto-prefix} ~css-var))))
       (-> fileset (boot/add-resource tmp) boot/commit!))))
