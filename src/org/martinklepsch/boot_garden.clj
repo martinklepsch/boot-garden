@@ -6,8 +6,8 @@
             [boot.file         :as file]
             [boot.util         :as util]))
 
-(def initial
-  (atom true))
+(def processed
+  (atom #{}))
 
 (defn add-dep [env dep]
   (update-in env [:dependencies] (fnil conj []) dep))
@@ -15,7 +15,7 @@
 (defn ns-tracker-pod []
   (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.3.0"][org.clojure/tools.namespace "0.2.11"]])))
 
-(defn garden-pool []
+(defonce garden-pods
   (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])
                 :init (fn [pod] (pod/require-in pod 'garden.core))))
 
@@ -33,21 +33,21 @@
         tmp         (boot/tmp-dir!)
         out         (io/file tmp output-path)
         src-paths   (vec (boot/get-env :source-paths))
-        garden-pods (garden-pool)
         ns-pod      (ns-tracker-pod)]
     (pod/with-eval-in ns-pod
       (require 'ns-tracker.core)
       (def cns (ns-tracker.core/ns-tracker ~src-paths)))
     (boot/with-pre-wrap fileset
-      (when (or @initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
-        (let [c-pod   (garden-pods :refresh)]
-          (if @initial (reset! initial false))
-          (util/info "Compiling %s...\n" (.getName out))
-          (io/make-parents out)
-          (pod/with-eval-in c-pod
-            (require '~ns-sym)
-            (garden.core/css {:output-to ~(.getPath out)
-                              :pretty-print? ~pretty-print
-                              :vendors ~vendors
-                              :auto-prefix ~auto-prefix} ~css-var))))
+      (let [initial (not (contains? @processed css-var))]
+        (when (or initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
+          (let [c-pod (garden-pods :refresh)]
+            (when initial (swap! processed conj css-var))
+            (util/info "Compiling %s...\n" (.getName out))
+            (io/make-parents out)
+            (pod/with-eval-in c-pod
+              (require '~ns-sym)
+              (garden.core/css {:output-to ~(.getPath out)
+                                :pretty-print? ~pretty-print
+                                :vendors ~vendors
+                                :auto-prefix ~auto-prefix} ~css-var)))))
       (-> fileset (boot/add-resource tmp) boot/commit!))))
