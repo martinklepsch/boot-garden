@@ -15,8 +15,9 @@
 (defn ns-tracker-pod []
   (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.3.0"][org.clojure/tools.namespace "0.2.11"]])))
 
-(defn garden-pool []
-  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])))
+(defonce garden-pods
+  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])
+                :init (fn [pod] (pod/require-in pod 'garden.core))))
 
 (deftask garden
   "compile garden"
@@ -32,7 +33,6 @@
         tmp         (boot/tmp-dir!)
         out         (io/file tmp output-path)
         src-paths   (vec (boot/get-env :source-paths))
-        garden-pods (garden-pool)
         ns-pod      (ns-tracker-pod)]
     (pod/with-eval-in ns-pod
       (require 'ns-tracker.core)
