@@ -1,6 +1,9 @@
 (ns stylesheet
   (:require [included :as incl]
+            [clojure.data.json :as json]
             [garden.def :as gdn]))
+
+(def x (json/write-str {:a 1}))
 
 (gdn/defstyles screen
   [:body
