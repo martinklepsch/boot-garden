@@ -16,7 +16,7 @@
   (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.3.0"][org.clojure/tools.namespace "0.2.11"]])))
 
 (defonce garden-pods
-  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])
+  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.3.0-SNAPSHOT"])
                 :init (fn [pod] (pod/require-in pod 'garden.core))))
 
 (deftask garden
@@ -40,7 +40,7 @@
     (boot/with-pre-wrap fileset
       (let [initial (not (contains? @processed css-var))]
         (when (or initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
-          (let [c-pod (garden-pods :refresh)]
+          (let [c-pod (:refresh garden-pods)]
             (when initial (swap! processed conj css-var))
             (util/info "Compiling %s...\n" (.getName out))
             (io/make-parents out)
