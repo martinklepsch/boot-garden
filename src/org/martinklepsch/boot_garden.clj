@@ -40,7 +40,7 @@
     (boot/with-pre-wrap fileset
       (let [initial (not (contains? @processed css-var))]
         (when (or initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
-          (let [c-pod (:refresh garden-pods)]
+          (let [c-pod (garden-pods :refresh)]
             (when initial (swap! processed conj css-var))
             (util/info "Compiling %s...\n" (.getName out))
             (io/make-parents out)
