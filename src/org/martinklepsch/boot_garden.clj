@@ -24,8 +24,8 @@
   [o output-to PATH      str   "The output css file path relative to docroot."
    s styles-var SYM      sym   "The var containing garden rules"
    p pretty-print        bool  "Pretty print compiled CSS"
-   v vendors             [str] "Vendors to apply prefixed for"
-   a auto-prefix         #{kw} "Properties to auto-prefix with vendor-prefixes"]
+   v vendors VENDORS     [str] "Vendors to apply prefixed for"
+   a auto-prefix PREFIX  #{kw} "Properties to auto-prefix with vendor-prefixes"]
 
   (let [output-path (or output-to "main.css")
         css-var     styles-var
