@@ -5,7 +5,7 @@
 
 (require '[adzerk.bootlaces :refer [bootlaces! build-jar push-release]])
 
-(def +version+ "1.2.5-7")
+(def +version+ "1.2.5-8")
 
 (bootlaces! +version+)
 
