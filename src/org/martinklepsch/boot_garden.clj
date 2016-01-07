@@ -16,7 +16,7 @@
   (pod/make-pod (assoc-in (boot/get-env) [:dependencies] '[[ns-tracker "0.3.0"][org.clojure/tools.namespace "0.2.11"]])))
 
 (defonce garden-pods
-  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.2.5"])
+  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.3.0"])
                 :init (fn [pod] (pod/require-in pod 'garden.core))))
 
 (deftask garden
