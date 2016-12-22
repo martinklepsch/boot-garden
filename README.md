@@ -49,22 +49,23 @@ In your `build.boot` you could call it like this:
 (deftask run
   "Generate CSS from Garden and watch for future changes"
   []
-  (comp (watch) (garden :styles-var 'creationist.styles/screen)))
+  (comp (watch) (garden :styles-var 'my-project.styles/screen)))
 ```
 
 ## Options
 
 See the [boot project](https://github.com/boot-clj/boot) for more information
-on how to use these. By default `boot-garden` will save the compiled CSS file at
-`target/main.css`.
+on how to use these.
 
 ```clojure
 [o output-to PATH      str   "The output css file path relative to target/"
  s styles-var SYM      sym   "The var containing garden rules"
  p pretty-print        bool  "Pretty print compiled CSS"
- v vendors NAME        [str] "Vendors to apply prefixed for"
+ v vendors NAME        [str] "Vendors to apply prefixes for"
  a auto-prefix NAME    [str] "Properties to auto-prefix with vendor-prefixes"]
 ```
+
+By default `boot-garden` will materialize the compiled CSS file on the fileset, and, as per [Boot's FAQ](https://github.com/boot-clj/boot/wiki/FAQ), will save it to `target/main.css` only when the `target` task ends the pipeline.
 
 ## License
 
