@@ -21,12 +21,22 @@
   (pod/pod-pool (add-dep (boot/get-env) '[garden "1.3.2"])
                 :init (fn [pod] (pod/require-in pod 'garden.core))))
 
+(defn css-prepend-resources [out css-prepend]
+  (with-open [os (io/output-stream out)]
+    (doseq [p css-prepend]
+      (if-let [p-resource (io/resource p)]
+        (do (util/info "Prepending %s with %s...\n"
+                       (.getName out) p)
+            (io/copy (io/file p-resource) os))
+        (util/warn "Prepend resource %s not found.\n" p)))))
+
 (deftask garden
   "compile garden"
   [o output-to PATH      str   "The output css file path relative to docroot."
    s styles-var SYM      sym   "The var containing garden rules"
    p pretty-print        bool  "Pretty print compiled CSS"
    v vendors VENDORS     [str] "Vendors to apply prefixed for"
+   c css-prepend PREPEND [str] "CSS resources to be prepended to output"
    a auto-prefix PREFIX  #{kw} "Properties to auto-prefix with vendor-prefixes"]
 
   (let [output-path (or output-to "main.css")
@@ -46,10 +56,13 @@
             (when initial (swap! processed conj css-var))
             (util/info "Compiling %s...\n" (.getName out))
             (io/make-parents out)
+            (when css-prepend
+              (css-prepend-resources out css-prepend))
             (pod/with-eval-in c-pod
               (require '~ns-sym)
-              (garden.core/css {:output-to ~(.getPath out)
-                                :pretty-print? ~pretty-print
-                                :vendors ~vendors
-                                :auto-prefix ~auto-prefix} ~css-var)))))
+              (spit ~(.getPath out)
+                    (garden.core/css {:pretty-print? ~pretty-print
+                                      :vendors ~vendors
+                                      :auto-prefix ~auto-prefix} ~css-var)
+                    :append true)))))
       (-> fileset (boot/add-resource tmp) boot/commit!))))
