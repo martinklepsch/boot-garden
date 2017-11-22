@@ -34,11 +34,11 @@
 
 (deftask garden
   "compile garden"
-  [o output-to PATH      str   "The output css file path relative to docroot."
+  [o output-to PATH      str   "The output css file path relative to docroot"
    s styles-var SYM      sym   "The var containing garden rules"
    p pretty-print        bool  "Pretty print compiled CSS"
-   v vendors VENDORS     [str] "Vendors to apply prefixed for"
-   c css-prepend PREPEND [str] "CSS resources to be prepended to output"
+   v vendors VENDORS     [str] "Vendors to apply prefixes for"
+   c css-prepend PREPEND [str] "Raw CSS from resources to be prepended to the output"
    a auto-prefix PREFIX  #{kw} "Properties to auto-prefix with vendor-prefixes"]
 
   (let [output-path (or output-to "main.css")
