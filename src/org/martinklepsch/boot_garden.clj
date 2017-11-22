@@ -21,7 +21,9 @@
   (pod/pod-pool (add-dep (boot/get-env) '[garden "1.3.2"])
                 :init (fn [pod] (pod/require-in pod 'garden.core))))
 
-(defn css-prepend-resources [out css-prepend]
+(defn- css-prepend-resources [out css-prepend]
+  "Prepend the output file with each resource in the array `css-prepend`,
+   before compiling the css"
   (with-open [os (io/output-stream out)]
     (doseq [p css-prepend]
       (if-let [p-resource (io/resource p)]
