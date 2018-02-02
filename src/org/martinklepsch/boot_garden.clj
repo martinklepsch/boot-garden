@@ -18,19 +18,8 @@
        pod/make-pod))
 
 (defonce garden-pods
-  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.3.2"])
+  (pod/pod-pool (add-dep (boot/get-env) '[garden "1.3.3"])
                 :init (fn [pod] (pod/require-in pod 'garden.core))))
-
-(defn- css-prepend-resources [out css-prepend]
-  "Prepend the output file with each resource in the array `css-prepend`,
-   before compiling the css"
-  (with-open [os (io/output-stream out)]
-    (doseq [p css-prepend]
-      (if-let [p-resource (io/resource p)]
-        (do (util/info "Prepending %s with %s...\n"
-                       (.getName out) p)
-            (io/copy (io/file p-resource) os))
-        (util/warn "Prepend resource %s not found.\n" p)))))
 
 (deftask garden
   "compile garden"
@@ -52,19 +41,18 @@
       (require 'ns-tracker.core)
       (def cns (ns-tracker.core/ns-tracker ~src-paths)))
     (boot/with-pre-wrap fileset
-      (let [initial (not (contains? @processed css-var))]
+      (let [initial (not (contains? @processed css-var))
+            preamble (mapv #(.getPath (io/resource %)) css-prepend)]
         (when (or initial (some #{ns-sym} (pod/with-eval-in ns-pod (cns))))
           (let [c-pod (garden-pods :refresh)]
             (when initial (swap! processed conj css-var))
             (util/info "Compiling %s...\n" (.getName out))
             (io/make-parents out)
-            (when css-prepend
-              (css-prepend-resources out css-prepend))
             (pod/with-eval-in c-pod
               (require '~ns-sym)
               (spit ~(.getPath out)
                     (garden.core/css {:pretty-print? ~pretty-print
                                       :vendors ~vendors
-                                      :auto-prefix ~auto-prefix} ~css-var)
-                    :append true)))))
+                                      :auto-prefix ~auto-prefix
+                                      :preamble ~preamble} ~css-var))))))
       (-> fileset (boot/add-resource tmp) boot/commit!))))
